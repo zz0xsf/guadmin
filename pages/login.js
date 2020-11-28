@@ -251,6 +251,7 @@ export default function Header({posts, ten}) {
         >
           <div className={classes.drawerHeader} />
             <TitleShow />
+            <br />
             <LoginShow />
         </main>
       </div>
