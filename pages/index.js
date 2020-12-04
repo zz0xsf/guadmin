@@ -36,6 +36,8 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ListItems from '../src/item';
+import onclickst from '../src/ost';
 
 const drawerWidth = 240;
 
@@ -188,22 +190,6 @@ export function CardShow(prop) {
   );
 }
 
-
-function onclicks(prop)
-{
-  console.log(prop);
-  console.log(prop.target.id);
-  let chooseText = prop.target.innerText;
-  if (chooseText === "主页")
-  {
-    window.location.href="/";
-  }
-  if (chooseText === "管理")
-  {
-    window.location.href="/set/";
-  }
-}
-
 export async function getServerSideProps() {
   const res = await fetch('https://admin.lzx.smallfang.fun/api/note.txt');
   const posts = await res.json();
@@ -212,6 +198,12 @@ export async function getServerSideProps() {
       posts,
     },
   }
+}
+
+export function onclicksf(prop)
+{
+  let t = onclickst(prop);
+  window.location.href = t;
 }
 
 export default function Header({posts}) {
@@ -257,7 +249,7 @@ export default function Header({posts}) {
           classes={{
             paper: classes.drawerPaper,
           }}
-          onClick={onclicks}
+          onClick={onclicksf}
         >
           <div className={classes.drawerHeader}>
             <IconButton onClick={handleDrawerClose}>
@@ -265,16 +257,7 @@ export default function Header({posts}) {
             </IconButton>
           </div>
           <Divider />
-          <List>
-              <ListItem button key="main" >
-                  <ListItemIcon><HomeIcon /></ListItemIcon>
-                  <ListItemText primary="主页"></ListItemText>
-              </ListItem>
-              <ListItem button key="set">
-                  <ListItemIcon><SettingsIcon /></ListItemIcon>
-                  <ListItemText primary="管理"></ListItemText>
-              </ListItem>
-          </List>
+          <ListItems />
         </Drawer>
         <main
           className={clsx(classes.content, {

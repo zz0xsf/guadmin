@@ -11,6 +11,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Card from '@material-ui/core/Card';
+import { withStyles } from '@material-ui/core/styles';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
@@ -37,8 +38,28 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import CheckIcon from '@material-ui/icons/Check';
+import ListItems from '../src/item';
+import onclickst from '../src/ost';
 
 const drawerWidth = 240;
+
+const styles = (theme) => ({
+    root: {
+        margin: 0,
+        padding: theme.spacing(2),
+    },
+    closeButton: {
+        position: 'absolute',
+        right: theme.spacing(1),
+        top: theme.spacing(1),
+        color: theme.palette.grey[500],
+    },
+});
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -124,6 +145,79 @@ const AccuseStyles = makeStyles((theme) => ({
 
 let ts;
 
+
+const DialogTitle = withStyles(styles)((props) => {
+    const { children, classes, onClose, ...other } = props;
+    return (
+        <MuiDialogTitle disableTypography className={classes.root} {...other}>
+            <Typography variant="h6">{children}</Typography>
+            {onClose ? (
+                <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+                    <CloseIcon />
+                </IconButton>
+            ) : null}
+        </MuiDialogTitle>
+    );
+});
+
+const DialogContent = withStyles((theme) => ({
+    root: {
+        padding: theme.spacing(2),
+    },
+}))(MuiDialogContent);
+
+const DialogActions = withStyles((theme) => ({
+    root: {
+        margin: 0,
+        padding: theme.spacing(1),
+    },
+}))(MuiDialogActions);
+
+export function CustomizedDialogs() {
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    return (
+        <div>
+          <center>
+            <Button variant="contained" onClick={submits} color="primary">
+                登录
+            </Button>
+            &nbsp;
+            <Button variant="contained" onClick={handleClickOpen}>
+                帮助
+            </Button>
+          </center>
+            <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+                <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+                    登录 | 帮助
+                </DialogTitle>
+                <DialogContent dividers>
+                    <Typography gutterBottom>
+                        欢乐好心情❤~ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button autoFocus onClick={handleClose} color="primary">
+                        OK
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
+}
+
+export function submits()
+{
+    console.log("test");
+}
+
 export function TitleShow(prop) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
@@ -138,42 +232,42 @@ export function TitleShow(prop) {
   );
 }
 
+let imgsrc;
+
+export function ShowVCode()
+{
+  return (
+    <div>
+      <TextField id="v_code" label="验证码" />
+      <img src={imgsrc} />
+    </ div>
+  );
+}
+
 export function LoginShow(prop) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
   return (
     <Card className={classes.root}>
       <CardContent>
-        <center>
           <Typography variant="body2" component="p">
             <TextField id="username" label="用户名" />
             <br />
             <TextField id="password" type="password" label="密码" />
+            <br />
+            <ShowVCode />
           </Typography>
-        </ center>
+          <br />
+          <CustomizedDialogs />
       </CardContent>
     </Card>
   );
 }
 
 
-function onclicks(prop)
-{
-  console.log(prop);
-  console.log(prop.target.id);
-  let chooseText = prop.target.innerText;
-  if (chooseText === "主页")
-  {
-    window.location.href="/";
-  }
-  if (chooseText === "管理")
-  {
-    window.location.href="/set/";
-  }
-}
 
 export async function getServerSideProps() {
-  const res = await fetch('https://admin.lzx.smallfang.fun/api/note.txt');
+  const res = await fetch('https://talk.lzx.smallfang.fun/backstage/v_code/get_new.php');
   const posts = await res.json();
   return {
     props: {
@@ -182,14 +276,20 @@ export async function getServerSideProps() {
   }
 }
 
+export function onclicksf(prop)
+{
+  let t = onclickst(prop);
+  window.location.href=t;
+}
+
 export default function Header({posts, ten}) {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const handleDrawerOpen = () => {
       setOpen(true);
-    };
-    ts = posts;
+    };  
+    imgsrc = "https://" + posts.image;
     const handleDrawerClose = () => {
       setOpen(false);
     };
@@ -225,7 +325,7 @@ export default function Header({posts, ten}) {
           classes={{
             paper: classes.drawerPaper,
           }}  
-          onClick={onclicks}
+          onClick={onclicksf}
         >
           <div className={classes.drawerHeader}>
             <IconButton onClick={handleDrawerClose}>
@@ -233,16 +333,7 @@ export default function Header({posts, ten}) {
             </IconButton>
           </div>
           <Divider />
-          <List>
-              <ListItem button key="main" >
-                  <ListItemIcon><HomeIcon /></ListItemIcon>
-                  <ListItemText primary="主页"></ListItemText>
-              </ListItem>
-              <ListItem button key="set">
-                  <ListItemIcon><SettingsIcon /></ListItemIcon>
-                  <ListItemText primary="管理"></ListItemText>
-              </ListItem>
-          </List>
+            <ListItems />
         </Drawer>
         <main
           className={clsx(classes.content, {
