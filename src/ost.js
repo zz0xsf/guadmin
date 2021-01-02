@@ -1,4 +1,4 @@
-
+﻿
 export default function onclickst(prop)
 {
   console.log(prop);
@@ -20,4 +20,5 @@ export default function onclickst(prop)
   {
     return "/usermain/";
   }
+  return "no";
 }

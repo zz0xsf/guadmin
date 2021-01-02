@@ -28,7 +28,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { render } from '@testing-library/react';
-import { Settings } from '@material-ui/icons';
+import { FormatColorResetSharp, Settings } from '@material-ui/icons';
 import HomeIcon from '@material-ui/icons/Home';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -48,6 +48,7 @@ import ListItems from '../src/item';
 import onclickst from '../src/ost';
 import MuiAlert from '@material-ui/lab/Alert';
 import cookie from 'react-cookies';
+import { green, purple } from '@material-ui/core/colors';
 var crypto = require('crypto');
 
 const drawerWidth = 240;
@@ -164,6 +165,7 @@ function md5ten(password)
 }
 
 
+
 export function ShowMessages(prop) {  
   let message = prop.message;
   let vals = prop.val;
@@ -189,7 +191,7 @@ export function ShowMessages(prop) {
   return (
     <div className={classes.root}>
       <div style={{display:abc.showElem}}><button onClick={handleClick} id="showmessage" /></div>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar id='messaget' open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={vals}>
           {message}
         </Alert>
@@ -224,10 +226,8 @@ function ReadyDoing(data, token, usernamet)
   }
   else if (data == "correct")
   {
-    cookie.save('username', usernamet);
-    cookie.save('token', token);
     ReactDOM.render(
-      <ShowMessages message="登录成功" val="success" />,
+      <ShowMessages message="注册成功" val="success" />,
       document.getElementById('notice')
     );
     console.log("test");
@@ -242,19 +242,24 @@ function ReadyDoing(data, token, usernamet)
   document.getElementById('showmessage').click();
 }
 
+let idf;
 
 function postss()
 {
   let usernamet = document.getElementById('usernames').value;
   let passwordt = document.getElementById('passwords').value;
+  let vcodet = document.getElementById('v_code').value;
+
   passwordt = md5ten(passwordt);
   console.log(passwordt);
   const abc = new URLSearchParams();
   abc.append('username', usernamet);
   abc.append('password', passwordt);
+  abc.append('v_code_va', vcodet);
+  abc.append('v_code_id', idf);
   axios({
     method:'post',
-    url:'https://talk.lzx.smallfang.fun/backstage/user/login_checker.php',
+    url:'https://talk.lzx.smallfang.fun/backstage/user/make_new.php',
     data: abc
   })
   .then(function (response) {
@@ -325,6 +330,32 @@ const DialogActions = withStyles((theme) => ({
     },
 }))(MuiDialogActions);
 
+function resetChecker()
+{
+    axios({
+        url:'https://talk.lzx.smallfang.fun/backstage/v_code/get_new.php',
+      })
+      .then(function (response) {
+          let dt = response.data;
+          document.getElementById('fst').src = "https://" + dt.image;
+          idf = dt.id;
+       })
+      .catch(function (error) {
+        console.log(error);
+        ReadyDoing("error-t");
+      });
+}
+
+const ColorButton = withStyles((theme) => ({
+    root: {
+        color: theme.palette.getContrastText(purple[500]),
+        backgroundColor: purple[500],
+        '&:hover': {
+        backgroundColor: purple[700],
+        },
+    },
+}))(Button);
+
 export function CustomizedDialogs() {
     const [open, setOpen] = React.useState(false);
 
@@ -339,22 +370,24 @@ export function CustomizedDialogs() {
         <div>
           <center>
             <Button variant="contained" onClick={submits} color="primary">
-                登录
+                注册
             </Button>
             &nbsp;
             <Button variant="contained" onClick={handleClickOpen}>
                 帮助
             </Button>
+            &nbsp;  
+            <ColorButton variant="contained" onClick={resetChecker} color="primary">
+            重新加载验证码
+            </ColorButton>
           </center>
             <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
                 <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-                    登录 | 帮助
+                    注册 | 帮助
                 </DialogTitle>
                 <DialogContent dividers>
                     <Typography gutterBottom>
                         欢乐好心情❤~
-                        <br />
-                        请保护好个人隐私信息。禁止他人随意查看token。
                         <br />
                     </Typography>
                 </DialogContent>
@@ -380,7 +413,7 @@ export function TitleShow(prop) {
     <Card className={classes.root}>
       <CardContent>
         <Typography variant="h5" component="h1">
-          登录
+          注册
         </Typography>
       </CardContent>
     </Card>
@@ -394,7 +427,7 @@ export function ShowVCode()
   let ts;
   if (imgsrc != "error")
   {
-     ts = <img src={imgsrc} />;
+     ts = <img id="fst" src={imgsrc} />;
   }
   else
   {
@@ -455,7 +488,6 @@ export async function getServerSideProps() {
 
 
 
-
 export function onclicksf(prop)
 {
   let t = onclickst(prop);
@@ -473,6 +505,7 @@ export default function Header({posts, ten}) {
     const handleDrawerOpen = () => {
       setOpen(true);
     };  
+    idf = posts.id;
     if (posts.image != "error")
     {
       imgsrc = "https://" + posts.image;
@@ -504,7 +537,7 @@ export default function Header({posts, ten}) {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap>
-              GU | Login
+              GU | Register
             </Typography>
           </Toolbar>
         </AppBar>

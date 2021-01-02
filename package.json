@@ -11,12 +11,17 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.57",
     "@react-aria/ssr": "^3.0.1",
     "axios": "^0.21.0",
+    "base-64": "^1.0.0",
+    "crypto": "^1.0.1",
     "express": "^4.17.1",
     "jquery": "^3.5.1",
     "next": "10.0.2",
     "react": "^17.0.1",
+    "react-cookie": "^4.0.3",
+    "react-cookies": "^0.1.1",
     "react-dom": "^17.0.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
@@ -26,5 +31,11 @@
   "devDependencies": {
     "@testing-library/dom": "^7.27.1",
     "@testing-library/react": "^11.2.1"
+  },
+  "proxy": {
+    "/pages": {
+      "target": "https://talk.lzx.smallfang.fun",
+      "changeOrigin": true
+    }
   }
 }

@@ -4,6 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import clsx from 'clsx';
 import Link from '@material-ui/core/Link';
+import { cookies } from 'react-cookie';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -38,6 +39,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ListItems from '../src/item';
 import onclickst from '../src/ost';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 const drawerWidth = 240;
 
@@ -203,7 +205,10 @@ export async function getServerSideProps() {
 export function onclicksf(prop)
 {
   let t = onclickst(prop);
-  window.location.href = t;
+  if (t != "no")
+  {
+    window.location.href=t;
+  }
 }
 
 export default function Header({posts}) {
@@ -237,7 +242,7 @@ export default function Header({posts}) {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap>
-              GU Admin
+              GU
             </Typography>
           </Toolbar>
         </AppBar>

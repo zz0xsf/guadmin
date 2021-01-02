@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Route, MemoryRouter } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
 import ReactDOM from 'react-dom';
@@ -37,8 +37,9 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import ListItems from '../src/item';
-import onclickst from '../src/ost';
+import ListItems from '../../src/item';
+import onclickst from '../../src/ost';
+import { useRouter } from 'next/router';
 
 const drawerWidth = 240;
 
@@ -136,24 +137,7 @@ export function MsgShow() {
     };
     return (
         <div className={classesb.root}>
-            {
-                <Accordion expanded={expanded === "p1"} onChange={handleChange("p1")}>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1bh-content"
-                        id="panel1bh-header"
-                    >
-                        <Typography className={classesb.heading}>前端设置</Typography>
-                        <Typography className={classesb.secondaryHeading}>个性化后台</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Typography>
-                            正在开发
-                        </Typography>
-                    </AccordionDetails>
-                </Accordion>
-            }
-
+            233
         </div>
     );
 }
@@ -203,6 +187,10 @@ export default function Header({posts}) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+    //设置路由
+    const router = useRouter();
+    console.log(router.query.id);
+    let Titles = "用户信息 | " + router.query.id;
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -223,7 +211,7 @@ export default function Header({posts}) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        GU Admin | Setting
+                        GU Admin | User
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -251,7 +239,7 @@ export default function Header({posts}) {
                 })}
             >
                 <div className={classes.drawerHeader} />
-                <CardShow headerMessage="设置" headerSize="h5" />
+                <CardShow headerMessage={Titles} headerSize="h5" />
                 <br />
                 <MsgShow />
             </main>

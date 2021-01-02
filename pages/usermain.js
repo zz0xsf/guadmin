@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Route, MemoryRouter } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
 import ReactDOM from 'react-dom';
@@ -39,6 +39,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ListItems from '../src/item';
 import onclickst from '../src/ost';
+import { useRouter } from 'next/router';
 
 const drawerWidth = 240;
 
@@ -136,24 +137,7 @@ export function MsgShow() {
     };
     return (
         <div className={classesb.root}>
-            {
-                <Accordion expanded={expanded === "p1"} onChange={handleChange("p1")}>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1bh-content"
-                        id="panel1bh-header"
-                    >
-                        <Typography className={classesb.heading}>前端设置</Typography>
-                        <Typography className={classesb.secondaryHeading}>个性化后台</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Typography>
-                            正在开发
-                        </Typography>
-                    </AccordionDetails>
-                </Accordion>
-            }
-
+            233
         </div>
     );
 }
@@ -203,6 +187,9 @@ export default function Header({posts}) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+    //设置路由
+    const router = useRouter();
+    console.log(router.pathname);
     return (
         <div className={classes.root}>
             <CssBaseline />
